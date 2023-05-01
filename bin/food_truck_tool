@@ -1,0 +1,29 @@
+#!/usr/bin/perl
+
+use strict;
+use warnings;
+
+package food_truck_tool::script;
+
+BEGIN {
+    use FindBin;
+    if ( -l $0 ) {
+        $0 = readlink($0);
+        FindBin->again;
+    }
+}
+
+use lib "$FindBin::Bin/../lib";
+
+use App::CmdDispatch;
+
+use food_truck_tool;
+
+run (@ARGV) if !caller;
+
+sub run {
+    my @args = @_;
+    return App::CmdDispatch->new( food_truck_tool::get_dispatch_args() )->run(@args);
+}
+
+1;
