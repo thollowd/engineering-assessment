@@ -1,1 +1,4 @@
 App::Task
+Getopt::Param::Tiny
+LWP::UserAgent
+Path::Tiny
