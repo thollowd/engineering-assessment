@@ -1,3 +1,4 @@
+App::CmdDispatch
 App::Task
 Cpanel::JSON::XS
 Getopt::Param::Tiny
