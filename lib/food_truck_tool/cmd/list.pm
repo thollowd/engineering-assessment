@@ -3,6 +3,7 @@ package food_truck_tool::cmd::list;
 use strict;
 use warnings;
 
+use Cpanel::JSON::XS    ();
 use Getopt::Param::Tiny ();
 
 use food_truck_tool::utils;
@@ -112,9 +113,13 @@ sub _list_sf {
     my $local_filename = 'sf.csv';
 
     my $raw_data  = food_truck_tool::utils::get_data( $end_point, $local_filename );
-    print "$raw_data\n";
+    my $data      = food_truck_tool::utils::decode_csv($raw_data);
 
-    print "listing sf\n";
+    my $organized_data = food_truck_tool::utils::get_csv_data_by_header($data);
+
+    my $json = Cpanel::JSON::XS::encode_json($organized_data);
+    print $json;
+
     return;
 }
 

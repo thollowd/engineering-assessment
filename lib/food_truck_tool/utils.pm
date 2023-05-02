@@ -5,7 +5,8 @@ use warnings;
 
 use Path::Tiny;
 
-use LWP::UserAgent   ();
+use LWP::UserAgent ();
+use Text::CSV      ();
 
 sub get_data {
     my ( $end_point, $filename ) = @_;
@@ -36,6 +37,50 @@ sub get_data {
     return $data;
 }
 
+sub decode_csv {
+    my ($raw_data) = @_;
+
+    die "raw_data arg is required\n" unless $raw_data;
+
+    my $csv = Text::CSV->new( { sep_char => ',' } );
+
+    my $data  = {};
+    my $i     = 0;
+    my @lines = split /\n/, $raw_data;
+    foreach my $line (@lines) {
+        $i++;
+
+        $csv->parse($line);
+        my @columns = $csv->fields();
+        next if _is_blank(\@columns);
+
+        $i == 1 ? $data->{headers} = \@columns : push @{ $data->{data} }, \@columns;
+    }
+
+    return $data;
+}
+
+sub get_csv_data_by_header {
+    my ($data) = @_;
+
+    die "data arg is required\n" unless $data;
+
+    my $organized_data = [];
+    foreach my $val ( @{ $data->{data} } ) {
+
+        my %temp_hash;
+        my $i = 0;
+        foreach my $header ( @{ $data->{headers} } ) {
+            $temp_hash{$header} = $val->[$i];
+            $i++;
+        }
+
+        push @$organized_data, \%temp_hash;
+    }
+
+    return $organized_data;
+}
+
 sub _ensure_directory {
     my ($dir) = @_;
 
@@ -43,6 +88,18 @@ sub _ensure_directory {
 
     mkdir $dir;
     return;
+}
+
+sub _is_blank {
+    my ($column) = @_;
+
+    return 1 if !ref $column;
+
+    foreach my $val (@$column) {
+        return 0 if $val;
+    }
+
+    return 1;
 }
 
 1;

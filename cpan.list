@@ -1,4 +1,6 @@
 App::Task
+Cpanel::JSON::XS
 Getopt::Param::Tiny
 LWP::UserAgent
 Path::Tiny
+Text::CSV
