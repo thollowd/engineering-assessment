@@ -22,6 +22,8 @@
 
 # TODO
 
+* Add better test coverage for the existing code
+
 * The next step is to add sort/search options for the list subcommand so that an end user can do things such as
 - Search for specific types of food
 - Sort by business name

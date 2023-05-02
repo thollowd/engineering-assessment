@@ -100,9 +100,13 @@ sub _make_uniq {
 sub _list_cities {
     my ($cities) = @_;
 
+    my $city_data = {};
     foreach my $city (@$cities) {
-        $supported_cities->{$city}->();
+        $city_data->{$city} = $supported_cities->{$city}->();
     }
+
+    my $json = Cpanel::JSON::XS::encode_json($city_data);
+    print $json;
 
     return;
 }
@@ -116,11 +120,7 @@ sub _list_sf {
     my $data      = food_truck_tool::utils::decode_csv($raw_data);
 
     my $organized_data = food_truck_tool::utils::get_csv_data_by_header($data);
-
-    my $json = Cpanel::JSON::XS::encode_json($organized_data);
-    print $json;
-
-    return;
+    return $organized_data;
 }
 
 1;

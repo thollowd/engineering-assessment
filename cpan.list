@@ -3,4 +3,5 @@ Cpanel::JSON::XS
 Getopt::Param::Tiny
 LWP::UserAgent
 Path::Tiny
+Test::Spec
 Text::CSV
